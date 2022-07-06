@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <html layout:decorate="~{layout}">
 	<div layout:fragment="content" class="container my-3">
 		<!-- 검색 시작 -->
@@ -92,20 +91,3 @@
 	});
 	</script>	
 </html>
-=======
-<h2>Hello Template</h2>
-<table>
-	<thead>
-		<tr>
-			<th>제목</th>
-			<th>작성일시</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr th:each="question : ${questionList}">
-			<td th:text="${question.subject}"></td>
-			<td th:text="${question.createDate}"></td>
-		</tr>
-	</tbody>
-</table>
->>>>>>> 37dd8869ddfce3063550505e618af6f663213bee

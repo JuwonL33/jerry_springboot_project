@@ -25,13 +25,12 @@
 				</div>
 				<!-- 댓글 반복 시작 -->
 				<div class="comment py-2 text-muted" th:each="comment : ${question.commentList}">
-			        <span class="card-body">
-			            <span class="comment-content" style="white-space: pre-line;" th:text="${comment.content}"></span>
-			            <span class="d-flex justify-content-end">
-				            <span th:if="${comment.author != null}" th:text="${comment.author.username}"></span> &nbsp;님
+			        <span class="card-body" style="font-size: 0.8em;">
+			            <span class="comment-content" th:text="${comment.content}"></span>
+			            <div class="badge bg-light text-dark p-2 text-start">
+				            <span th:if="${comment.author != null}" th:text="${comment.author.username}"></span>
 			                &nbsp;|&nbsp; <span th:text="${#temporals.format(comment.createDate, 'yyyy-MM-dd HH:mm')}"></span>
-			                    
-			            </span>
+			            </div>
     					<a th:href="@{|/comment/modify/${comment.id}|}" class="btn btn-sm btn-outline-secondary py-0" sec:authorize="isAuthenticated()" th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}" th:text="수정"></a>
 						<a href="javascript:void(0)" th:data-uri="@{|/comment/delete/${comment.id}|}" class="delete btn btn-sm btn-outline-secondary py-0" sec:authorize="isAuthenticated()" th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}" th:text="삭제"></a>
 			        </span>
@@ -75,13 +74,13 @@
 				</div>
 				<!-- 답변의 댓글 반복 시작 -->
 				<div class="comment py-2 text-muted" th:each="comment : ${answer.commentList}">
-			        <span class="card-body">
-			            <span class="comment-content" style="white-space: pre-line;" th:text="${comment.content}"></span>
-			            <span class="d-flex justify-content-end">
-				            <span th:if="${comment.author != null}" th:text="${comment.author.username}"></span> &nbsp;님
+			        <span class="card-body" style="font-size: 0.8em;">
+			            <span class="comment-content" th:text="${comment.content}"></span>
+			            <div class="badge bg-light text-dark p-2 text-start">
+				            <span th:if="${comment.author != null}" th:text="${comment.author.username}"></span>
 			                &nbsp;|&nbsp; <span th:text="${#temporals.format(comment.createDate, 'yyyy-MM-dd HH:mm')}"></span>
 			                    
-			            </span>
+			            </div>
     					<a th:href="@{|/comment/modify/${comment.id}|}" class="btn btn-sm btn-outline-secondary py-0" sec:authorize="isAuthenticated()" th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}" th:text="수정"></a>
 						<a href="javascript:void(0)" th:data-uri="@{|/comment/delete/${comment.id}|}" class="delete btn btn-sm btn-outline-secondary py-0" sec:authorize="isAuthenticated()" th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}" th:text="삭제"></a>
 			        </span>
