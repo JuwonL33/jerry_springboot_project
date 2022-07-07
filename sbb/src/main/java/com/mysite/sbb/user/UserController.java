@@ -1,13 +1,29 @@
 package com.mysite.sbb.user;
 
+import java.security.Principal;
+
 import javax.validation.Valid;
 
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.server.ResponseStatusException;
+
+import com.mysite.sbb.answer.Answer;
+import com.mysite.sbb.answer.AnswerService;
+import com.mysite.sbb.comment.Comment;
+import com.mysite.sbb.comment.CommentService;
+import com.mysite.sbb.question.Question;
+import com.mysite.sbb.question.QuestionService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,6 +33,9 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 
     private final UserService userService;
+    private final QuestionService questionService;
+    private final AnswerService answerService;
+    private final CommentService commentService;
 
     @GetMapping("/signup")
     public String signup(UserCreateForm userCreateForm) {
@@ -56,6 +75,68 @@ public class UserController {
     @GetMapping("/login")
     public String login() {
     	return "login_form";
+    }
+    
+    /* user info : base */
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/myInfo/base/{username}")
+    public String myInfoBase(@PathVariable("username") String username, Model model, Principal principal) {
+    	SiteUser siteUser = this.userService.getUser(username);
+		if(!siteUser.getUsername().equals(principal.getName())){							// 세션에 있는 사용자와 다른 사용자가 수정 요청했을 때
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 사용자가 아닙니다.");
+		}
+		
+    	model.addAttribute("siteUser", siteUser);
+    	
+    	return "user_info_base";
+    }
+    
+    /* user info : questionList */
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/myInfo/question/{username}")
+    public String myInfoQuestion(@RequestParam(value="page", defaultValue="0") int page, @PathVariable("username") String username, Model model, Principal principal) {
+    	SiteUser siteUser = this.userService.getUser(username);
+		if(!siteUser.getUsername().equals(principal.getName())){							// 세션에 있는 사용자와 다른 사용자가 수정 요청했을 때
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 사용자가 아닙니다.");
+		}
+		
+		
+		Page<Question> paging = this.questionService.getListByUsername(page, siteUser);
+		model.addAttribute("siteUser", siteUser);
+    	model.addAttribute("paging", paging);
+    	
+    	return "user_info_question";
+    }
+    
+    /* user info : answerList */
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/myInfo/answer/{username}")
+    public String myInfoAnswer(@RequestParam(value="page", defaultValue="0") int page, @PathVariable("username") String username, Model model, Principal principal) {
+    	SiteUser siteUser = this.userService.getUser(username);
+		if(!siteUser.getUsername().equals(principal.getName())){							// 세션에 있는 사용자와 다른 사용자가 수정 요청했을 때
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 사용자가 아닙니다.");
+		}
+		
+		Page<Answer> paging = this.answerService.getListByUsername(page, siteUser);
+		model.addAttribute("siteUser", siteUser);
+    	model.addAttribute("paging", paging);
+    	
+    	return "user_info_answer";
+    }
+    
+    /* user info : commentList */
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/myInfo/comment/{username}")
+    public String myInfoComment(@RequestParam(value="page", defaultValue="0") int page, @PathVariable("username") String username, Model model, Principal principal) {
+    	SiteUser siteUser = this.userService.getUser(username);
+		if(!siteUser.getUsername().equals(principal.getName())){							// 세션에 있는 사용자와 다른 사용자가 수정 요청했을 때
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 사용자가 아닙니다.");
+		}
+		
+		Page<Comment> paging = this.commentService.getListByUsername(page, siteUser);
+		model.addAttribute("siteUser", siteUser);
+    	model.addAttribute("paging", paging);
+    	return "user_info_comment";
     }
   
 }

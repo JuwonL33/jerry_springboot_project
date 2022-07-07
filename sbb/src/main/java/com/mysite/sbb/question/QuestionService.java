@@ -93,4 +93,13 @@ public class QuestionService {
 		question.getVoter().add(siteUser);
 		this.questionRepository.save(question);
 	}
+	
+	public Page<Question> getListByUsername(int page, SiteUser siteUser)
+	{
+		List<Sort.Order> sorts = new ArrayList<>();									// 생성일자 역순으로 정렬을 위해 sorts 객체 생성
+		sorts.add(Sort.Order.desc("createDate"));									// 생성일자 역순으로 정렬
+		Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));				// page 번호를 param으로 받는다. Pageable 객체를 반환.
+		// Specification<Question> spec = search(kw);
+		return this.questionRepository.findAllByAuthor(pageable, siteUser);
+	}
 }
