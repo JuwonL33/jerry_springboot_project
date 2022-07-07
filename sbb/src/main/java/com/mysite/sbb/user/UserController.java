@@ -88,7 +88,7 @@ public class UserController {
 		
     	model.addAttribute("siteUser", siteUser);
     	
-    	return "user_info_base";
+    	return "/userInfo/user_info_base";
     }
     
     /* user info : questionList */
@@ -105,7 +105,7 @@ public class UserController {
 		model.addAttribute("siteUser", siteUser);
     	model.addAttribute("paging", paging);
     	
-    	return "user_info_question";
+    	return "/userInfo/user_info_question";
     }
     
     /* user info : answerList */
@@ -121,7 +121,7 @@ public class UserController {
 		model.addAttribute("siteUser", siteUser);
     	model.addAttribute("paging", paging);
     	
-    	return "user_info_answer";
+    	return "/userInfo/user_info_answer";
     }
     
     /* user info : commentList */
@@ -136,7 +136,7 @@ public class UserController {
 		Page<Comment> paging = this.commentService.getListByUsername(page, siteUser);
 		model.addAttribute("siteUser", siteUser);
     	model.addAttribute("paging", paging);
-    	return "user_info_comment";
+    	return "/userInfo/user_info_comment";
     }
   
 }

@@ -44,7 +44,7 @@ public class QuestionController {
 		Page<Question> paging = this.questionService.getList(page, kw);
 		model.addAttribute("paging", paging);			// 이전에 가지고 있었던 paging 값을 기억해뒀다가 다시 돌려줌
 		model.addAttribute("kw", kw);					// 이전에 가지고 있었던 kw 값을 기억해뒀다가 다시 돌려줌
-		return "question_list";
+		return "/question/question_list";
 	}
 	
 	@RequestMapping("/detail/{id}")
@@ -55,20 +55,20 @@ public class QuestionController {
 		Page<Answer> answerPaging = this.answerService.getAnswerList(id, page);				// answerList는 페이징처리하여 별도로 조회하기
 		model.addAttribute("question", question);
 		model.addAttribute("answerPaging", answerPaging);
-		return "question_detail";
+		return "/question/question_detail";
 	}
 	
 	@PreAuthorize("isAuthenticated()")				// 로그인이 필요한 메서드. 로그인 안되어 있으면 로그인 페이지로 이동시킴
 	@GetMapping("/create")
 	public String questionCreate(QuestionForm questionForm) {
-		return "question_form";
+		return "/question/question_form";
 	}
 	
 	@PreAuthorize("isAuthenticated()")				// 로그인이 필요한 메서드. 로그인 안되어 있으면 로그인 페이지로 이동시킴
 	@PostMapping("/create")
 	public String questionCreate(@Valid QuestionForm questionForm, BindingResult bindingResult, Principal principal) {
 		if (bindingResult.hasErrors()) {
-			return "question_form";
+			return "/question/question_form";
 		}
 		
 		SiteUser siteUser = this.userService.getUser(principal.getName());
@@ -85,14 +85,14 @@ public class QuestionController {
 		}
 		questionForm.setSubject(question.getSubject());
 		questionForm.setContent(question.getContent());
-		return "question_form";
+		return "/question/question_form";
 	}
 	
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("modify/{id}")
 	public String questionModify(@Valid QuestionForm questionForm, BindingResult bindingResult, Principal principal, @PathVariable("id") Integer id) {
 		if (bindingResult.hasErrors()) {
-			return "question_form";
+			return "/question/question_form";
 		}
 		Question question = this.questionService.getQuestion(id);
 		if (!question.getAuthor().getUsername().equals(principal.getName())) {
