@@ -1,7 +1,11 @@
 package com.mysite.sbb.question;
 
 import java.security.Principal;
+import java.util.Enumeration;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.data.domain.Page;
@@ -29,7 +33,6 @@ import com.mysite.sbb.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/question")
 @Controller
@@ -53,25 +56,44 @@ public class QuestionController {
 		model.addAttribute("cate", category.getLabel());
 		return "/question/question_list";
 	}
-	/*
-	@RequestMapping("/list")
-	// http://localhost:8080/question/list?page=0 처럼 GET 방식으로 요청된 URL에서 page값을 가져오기 위해 @RequestParam 처리
-	public String list(Model model, @RequestParam(value="page", defaultValue="0") int page, @RequestParam(value="kw", defaultValue="") String kw) {
-		log.info("page:{}, kw:{}", page, kw);
-		Page<Question> paging = this.questionService.getList(page, kw);
-		model.addAttribute("paging", paging);			// 이전에 가지고 있었던 paging 값을 기억해뒀다가 다시 돌려줌
-		model.addAttribute("kw", kw);					// 이전에 가지고 있었던 kw 값을 기억해뒀다가 다시 돌려줌
-		return "/question/question_list";
-	}*/
 	
 	@RequestMapping("/detail/{cate}/{id}")
 	public String detail(Model model, 
 			@PathVariable("id") Integer id, 
 			@PathVariable("cate") String cate,
 			AnswerForm answerForm, CommentForm commentForm, 
-			@RequestParam(value="page", defaultValue="0") int page) {
+			@RequestParam(value="page", defaultValue="0") int page,
+			HttpServletRequest request,
+            HttpServletResponse response) {
 		Question question = this.questionService.getQuestion(id);
-		this.questionService.updateView(id);
+		
+		/* 조회수 로직 */
+		Cookie oldCookie = null;
+		Cookie[] cookies = request.getCookies();
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				if (cookie.getName().equals("postView")) {
+					oldCookie = cookie;
+				}
+			}
+		}
+		
+		if (oldCookie != null) {
+			if (!oldCookie.getValue().contains("["+ id.toString() +"]")) {
+				this.questionService.updateView(id);
+				oldCookie.setValue(oldCookie.getValue() + "_[" + id + "]");
+				oldCookie.setPath("/");
+				oldCookie.setMaxAge(60 * 60 * 24); 							// 쿠키 시간
+				response.addCookie(oldCookie);
+			}
+		} else {
+			this.questionService.updateView(id);
+			Cookie newCookie = new Cookie("postView", "[" + id + "]");
+			newCookie.setPath("/");
+			newCookie.setMaxAge(60 * 60 * 24); 								// 쿠키 시간
+			response.addCookie(newCookie);
+		}
+        
 		Page<Answer> answerPaging = this.answerService.getAnswerList(id, page);				// answerList는 페이징처리하여 별도로 조회하기
 		model.addAttribute("question", question);
 		model.addAttribute("answerPaging", answerPaging);
