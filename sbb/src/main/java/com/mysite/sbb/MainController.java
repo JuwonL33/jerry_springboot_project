@@ -15,6 +15,6 @@ public class MainController {
 	
 	@RequestMapping("/")
 	public String root() {
-		return "redirect:/question/list";
+		return "redirect:/question/list/qna";
 		}
 }

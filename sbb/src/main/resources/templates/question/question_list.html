@@ -3,7 +3,7 @@
 		<!-- 검색 시작 -->
 		<div class="row my-3">
 			<div class="col-6">
-				<a th:href="@{/question/create}" class="btn btn-primary">질문 등록하기</a>
+				<a th:href="@{|/question/create/${cate}|}" class="btn btn-primary">질문 등록하기</a>
 			</div>
 			<div class="col-6">
 				<div class="input-group">
@@ -28,7 +28,7 @@
 		        <tr class="text-center" th:each="question, loop : ${paging}">
 		        	<td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
 		            <td class="text-start">
-		                <a th:href="@{|/question/detail/${question.id}|}" th:text="${question.subject}"></a>
+		                <a th:href="@{|/question/detail/${cate}/${question.id}|}" th:text="${question.subject}"></a>
 		                <span class="text-danger small ms-2" th:if="${#lists.size(question.answerList) > 0}"
 		                th:text="${#lists.size(question.answerList)}"></span>
 		            </td>

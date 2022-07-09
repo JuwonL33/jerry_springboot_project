@@ -20,6 +20,8 @@ import org.springframework.web.server.ResponseStatusException;
 import com.mysite.sbb.answer.Answer;
 import com.mysite.sbb.answer.AnswerForm;
 import com.mysite.sbb.answer.AnswerService;
+import com.mysite.sbb.category.Category;
+import com.mysite.sbb.category.CategoryService;
 import com.mysite.sbb.comment.CommentForm;
 import com.mysite.sbb.user.SiteUser;
 import com.mysite.sbb.user.UserService;
@@ -36,7 +38,22 @@ public class QuestionController {
 	public final QuestionService questionService;
 	public final AnswerService answerService;
 	public final UserService userService;
+	public final CategoryService categoryService;
 	
+	@RequestMapping("/list/{cate}")
+	// http://localhost:8080/question/list?page=0 처럼 GET 방식으로 요청된 URL에서 page값을 가져오기 위해 @RequestParam 처리
+	public String list(Model model, @RequestParam(value="page", defaultValue="0") int page, 
+			@RequestParam(value="kw", defaultValue="") String kw,
+			@PathVariable("cate") String cate) {
+		// log.info("page:{}, kw:{}", page, kw);
+		Category category = this.categoryService.findCategoryByLabel(cate);
+		Page<Question> paging = this.questionService.getList(page, kw, category);
+		model.addAttribute("paging", paging);			// 이전에 가지고 있었던 paging 값을 기억해뒀다가 다시 돌려줌
+		model.addAttribute("kw", kw);					// 이전에 가지고 있었던 kw 값을 기억해뒀다가 다시 돌려줌
+		model.addAttribute("cate", category.getLabel());
+		return "/question/question_list";
+	}
+	/*
 	@RequestMapping("/list")
 	// http://localhost:8080/question/list?page=0 처럼 GET 방식으로 요청된 URL에서 page값을 가져오기 위해 @RequestParam 처리
 	public String list(Model model, @RequestParam(value="page", defaultValue="0") int page, @RequestParam(value="kw", defaultValue="") String kw) {
@@ -45,11 +62,13 @@ public class QuestionController {
 		model.addAttribute("paging", paging);			// 이전에 가지고 있었던 paging 값을 기억해뒀다가 다시 돌려줌
 		model.addAttribute("kw", kw);					// 이전에 가지고 있었던 kw 값을 기억해뒀다가 다시 돌려줌
 		return "/question/question_list";
-	}
+	}*/
 	
-	@RequestMapping("/detail/{id}")
+	@RequestMapping("/detail/{cate}/{id}")
 	public String detail(Model model, 
-			@PathVariable("id") Integer id, AnswerForm answerForm, CommentForm commentForm, 
+			@PathVariable("id") Integer id, 
+			@PathVariable("cate") String cate,
+			AnswerForm answerForm, CommentForm commentForm, 
 			@RequestParam(value="page", defaultValue="0") int page) {
 		Question question = this.questionService.getQuestion(id);
 		Page<Answer> answerPaging = this.answerService.getAnswerList(id, page);				// answerList는 페이징처리하여 별도로 조회하기
@@ -59,26 +78,27 @@ public class QuestionController {
 	}
 	
 	@PreAuthorize("isAuthenticated()")				// 로그인이 필요한 메서드. 로그인 안되어 있으면 로그인 페이지로 이동시킴
-	@GetMapping("/create")
-	public String questionCreate(QuestionForm questionForm) {
+	@GetMapping("/create/{cate}")
+	public String questionCreate(@PathVariable("cate") String cate, QuestionForm questionForm) {
 		return "/question/question_form";
 	}
 	
 	@PreAuthorize("isAuthenticated()")				// 로그인이 필요한 메서드. 로그인 안되어 있으면 로그인 페이지로 이동시킴
-	@PostMapping("/create")
-	public String questionCreate(@Valid QuestionForm questionForm, BindingResult bindingResult, Principal principal) {
+	@PostMapping("/create/{cate}")
+	public String questionCreate(@Valid QuestionForm questionForm, @PathVariable("cate") String cate, BindingResult bindingResult, Principal principal) {
 		if (bindingResult.hasErrors()) {
 			return "/question/question_form";
 		}
 		
 		SiteUser siteUser = this.userService.getUser(principal.getName());
-		this.questionService.create(questionForm.getSubject(), questionForm.getContent(), siteUser);
-		return "redirect:/question/list";	// 질문 저장 후 질문목록으로 이동
+		Category category = this.categoryService.findCategoryByLabel(cate);
+		this.questionService.create(questionForm.getSubject(), questionForm.getContent(), siteUser, category);
+		return String.format("redirect:/question/list/%s", category.getLabel());
 	}
 	
 	@PreAuthorize("isAuthenticated()")				// 로그인이 필요한 메서드. 로그인 안되어 있으면 로그인 페이지로 이동시킴
-	@GetMapping("/modify/{id}")
-	public String questionModify(QuestionForm questionForm, @PathVariable("id") Integer id, Principal principal) {
+	@GetMapping("/modify/{cate}/{id}")
+	public String questionModify(QuestionForm questionForm, @PathVariable("cate") String cate, @PathVariable("id") Integer id, Principal principal) {
 		Question question = this.questionService.getQuestion(id);
 		if(!question.getAuthor().getUsername().equals(principal.getName())){				// 세션에 있는 사용자와 다른 사용자가 수정 요청했을 때
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
@@ -89,8 +109,8 @@ public class QuestionController {
 	}
 	
 	@PreAuthorize("isAuthenticated()")
-	@PostMapping("modify/{id}")
-	public String questionModify(@Valid QuestionForm questionForm, BindingResult bindingResult, Principal principal, @PathVariable("id") Integer id) {
+	@PostMapping("modify/{cate}/{id}")
+	public String questionModify(@Valid QuestionForm questionForm, @PathVariable("cate") String cate, BindingResult bindingResult, Principal principal, @PathVariable("id") Integer id) {
 		if (bindingResult.hasErrors()) {
 			return "/question/question_form";
 		}
@@ -99,12 +119,12 @@ public class QuestionController {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
 		}
 		this.questionService.modify(question, questionForm.getSubject(), questionForm.getContent());
-		return String.format("redirect:/question/detail/%s", id);
+		return String.format("redirect:/question/detail/%s/%s", cate, id);
 	}
 	
 	@PreAuthorize("isAuthenticated()")
-	@GetMapping("/delete/{id}")
-	public String questionDelete(Principal principal, @PathVariable("id") Integer id) {
+	@GetMapping("/delete/{cate}/{id}")
+	public String questionDelete(Principal principal, @PathVariable("cate") String cate, @PathVariable("id") Integer id) {
 		Question question = this.questionService.getQuestion(id);
 		if (!question.getAuthor().getUsername().equals(principal.getName())) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
@@ -114,11 +134,11 @@ public class QuestionController {
 	}
 	
 	@PreAuthorize("isAuthenticated()")
-	@GetMapping("/vote/{id}")
-	public String questionVote(Principal principal, @PathVariable("id") Integer id) {
+	@GetMapping("/vote/{cate}/{id}")
+	public String questionVote(Principal principal, @PathVariable("cate") String cate, @PathVariable("id") Integer id) {
 		Question question = this.questionService.getQuestion(id);
 		SiteUser siteUser = this.userService.getUser(principal.getName());
 		this.questionService.vote(question, siteUser);
-		return String.format("redirect:/question/detail/%s", id);
+		return String.format("redirect:/question/detail/%s/%s", cate, id);
 	}
 }

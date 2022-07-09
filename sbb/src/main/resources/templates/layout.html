@@ -14,8 +14,17 @@
 <body>
 	<!-- 네비게이션바 -->
 	<nav th:replace="navbar :: navbarFragment"></nav>
+	<!-- 사이드바 -->
+	<div class="row" style="height: auto !important;">
+        <div class="col-sm-12 col-md-3 col-lg-2 p-2" style="height: auto !important;">
+			<nav th:replace="sidebar :: sidebarFragment"></nav>
+        </div>
+	
 	<!-- 기본 템플릿 안에 삽입될 내용 Start -->
-	<th:block layout:fragment="content"></th:block>
+		<div class="col-sm-12 col-md-9 col-lg-10 p-2" style="height: auto !important;">
+			<th:block layout:fragment="content"></th:block>
+		</div>
+	</div>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script th:src="@{/bootstrap.min.js}"></script>
 <!-- 자바스크립트 시작 -->

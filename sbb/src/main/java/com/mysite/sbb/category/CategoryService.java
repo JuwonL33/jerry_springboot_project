@@ -24,6 +24,10 @@ public class CategoryService {
 		}
 	}
 	
+	public Category findCategoryByLabel(String label) {
+		return this.categoryRepository.findByLabel(label);
+	}
+	
 	
 	public Category create(String label) {
 		Category category = new Category();
