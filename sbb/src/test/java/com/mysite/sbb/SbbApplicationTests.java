@@ -1,10 +1,14 @@
 package com.mysite.sbb;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.mysite.sbb.answer.AnswerService;
+import com.mysite.sbb.category.Category;
+import com.mysite.sbb.category.CategoryService;
 import com.mysite.sbb.question.Question;
 import com.mysite.sbb.question.QuestionService;
 import com.mysite.sbb.user.SiteUser;
@@ -22,14 +26,19 @@ class SbbApplicationTests {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private CategoryService categoryService;
+	
 	@Test
 	void contextLoads() {
-		for (int i = 1; i <= 300; i++) {
-			Question question = this.questionService.getQuestion(307);
-			SiteUser siteUser = this.userService.getUser("admin");
-			String content = "내용없음";
-			this.answerService.create(question, content, siteUser);
-		}
+		/*
+		List<Question> questionList = this.questionService.getAllQuestion();
+		// Category category = this.categoryService.getCategory(2);
+		System.out.println("questionList : " + questionList);
+		
+		for(Question question: questionList) {
+		    this.questionService.update(question, category);
+		}*/
 	}
 
 }

@@ -4,7 +4,7 @@
 		<!-- userInfo 네비게이션 바 -->
 		<ul class="nav nav-tabs">
 		    <li class="nav-item">
-		        <a class="nav-link" th:href="@{|/user/myInfo/base/${#authentication.getPrincipal().getUsername()}|}">기본정보</a>
+		        <a class="nav-link" th:href="@{|/user/myInfo/base/${#authentication.getPrincipal().getUsername()}|}">내 정보</a>
 		    </li>
 		    <li class="nav-item">
 		        <a class="nav-link" th:href="@{|/user/myInfo/question/${#authentication.getPrincipal().getUsername()}|}">게시</a>

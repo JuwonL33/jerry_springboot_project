@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.mysite.sbb.category.Category;
 import com.mysite.sbb.user.SiteUser;
 
 /*
@@ -38,4 +39,6 @@ public interface QuestionRepository extends JpaRepository<Question, Integer> {
 	Page<Question> findAllByKeyword(@Param("kw") String kw, Pageable pageable);
 	
 	Page<Question> findAllByAuthor(Pageable pageable, SiteUser siteUser);
+	
+	Page<Question> findAllByCategory(Specification<Question> spec, Pageable pageable, Category category);
 }
