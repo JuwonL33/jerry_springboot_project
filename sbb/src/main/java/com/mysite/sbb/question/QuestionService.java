@@ -11,6 +11,7 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -114,5 +115,11 @@ public class QuestionService {
 		Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));				// page 번호를 param으로 받는다. Pageable 객체를 반환.
 		// Specification<Question> spec = search(kw);
 		return this.questionRepository.findAllByAuthor(pageable, siteUser);
+	}
+	
+	/* Views Counting */
+	@Transactional
+	public int updateView(Integer id) {
+		return this.questionRepository.updateView(id);
 	}
 }

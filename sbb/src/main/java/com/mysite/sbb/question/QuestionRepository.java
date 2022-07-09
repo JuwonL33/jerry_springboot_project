@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -43,4 +44,8 @@ public interface QuestionRepository extends JpaRepository<Question, Integer> {
 	Page<Question> findAllByAuthor(Pageable pageable, SiteUser siteUser);
 	
 	Page<Question> findAllByCategory(Specification<Question> spec, Pageable pageable, Category category);
+	
+	@Modifying
+	@Query("update Question q set q.view = q.view + 1 where q.id = :id")
+	int updateView(@Param("id") Integer id);
 }

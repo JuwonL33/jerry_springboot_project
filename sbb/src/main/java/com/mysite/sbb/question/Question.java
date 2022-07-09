@@ -56,4 +56,7 @@ public class Question {
 	
 	@ManyToOne
 	private Category category;
+	
+	@Column(columnDefinition = "integer default 0", nullable = false)	// 조회수
+	private int view;
 }

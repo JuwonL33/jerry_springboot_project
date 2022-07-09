@@ -71,6 +71,7 @@ public class QuestionController {
 			AnswerForm answerForm, CommentForm commentForm, 
 			@RequestParam(value="page", defaultValue="0") int page) {
 		Question question = this.questionService.getQuestion(id);
+		this.questionService.updateView(id);
 		Page<Answer> answerPaging = this.answerService.getAnswerList(id, page);				// answerList는 페이징처리하여 별도로 조회하기
 		model.addAttribute("question", question);
 		model.addAttribute("answerPaging", answerPaging);
