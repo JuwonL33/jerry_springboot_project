@@ -48,7 +48,7 @@ public class CommentController {
 		
 		this.commentService.createQuestionComment(question, commentForm.getContent(), siteUser);
 		
-		return String.format("redirect:/question/detail/%s", question.getId());
+		return String.format("redirect:/question/detail/%s/%s", question.getCategory().getLabel(), question.getId());
 	}
 	
 	// Post : Create Answer Comment
@@ -64,7 +64,7 @@ public class CommentController {
 		
 		this.commentService.createAnswerComment(answer, commentForm.getContent(), siteUser);
 		
-		return String.format("redirect:/question/detail/%s", answer.getQuestion().getId());
+		return String.format("redirect:/question/detail/%s/%s", answer.getQuestion().getCategory().getLabel() ,answer.getQuestion().getId());
 	}
 	
 	// Get : Modify Comment
@@ -92,9 +92,9 @@ public class CommentController {
         }
         this.commentService.modify(comment, commentForm.getContent());
         if (comment.getQuestion() != null) {
-        	return String.format("redirect:/question/detail/%s", comment.getQuestion().getId());
+        	return String.format("redirect:/question/detail/%s/%s", comment.getQuestion().getCategory().getLabel(), comment.getQuestion().getId());
         } else {
-        	return String.format("redirect:/question/detail/%s", comment.getAnswer().getQuestion().getId());
+        	return String.format("redirect:/question/detail/%s/%s", comment.getAnswer().getQuestion().getCategory().getLabel(), comment.getAnswer().getQuestion().getId());
         }
         
     }
@@ -109,9 +109,9 @@ public class CommentController {
 		}
 		this.commentService.delete(comment);
         if (comment.getQuestion() != null) {
-        	return String.format("redirect:/question/detail/%s", comment.getQuestion().getId());
+        	return String.format("redirect:/question/detail/%s/%s", comment.getQuestion().getCategory().getLabel(), comment.getQuestion().getId());
         } else {
-        	return String.format("redirect:/question/detail/%s", comment.getAnswer().getQuestion().getId());
+        	return String.format("redirect:/question/detail/%s/%s", comment.getAnswer().getQuestion().getCategory().getLabel(), comment.getAnswer().getQuestion().getId());
         }
 	}
 }
