@@ -11,6 +11,9 @@
                     <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{|/user/myInfo/base/${#authentication.getPrincipal().getUsername()}|}"  th:text="${#authentication.getPrincipal().getUsername()}"></a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" th:href="@{/common/latest}">최근 이력</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/user/login}">로그인</a>
                 </li>
                 <li class="nav-item">

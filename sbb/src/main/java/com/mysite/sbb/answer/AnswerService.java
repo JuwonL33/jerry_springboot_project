@@ -74,4 +74,12 @@ public class AnswerService {
 		Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));				// page 번호를 param으로 받는다. Pageable 객체를 반환.
 		return this.answerRepository.findAllByAuthor(pageable, siteUser);
 	}
+	
+	/*
+	 * 최근 답변 조회
+	 */
+	public List<Answer> getAnswerListSortByCreateDate()
+	{	
+		return this.answerRepository.findTop15OrderByCreateDateDesc();
+	}
 }

@@ -70,4 +70,12 @@ public class CommentService {
 		Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));				// page 번호를 param으로 받는다. Pageable 객체를 반환.
 		return this.commentRepository.findAllByAuthor(pageable, siteUser);
 	}
+	
+	/*
+	 * 최근 댓글 조회
+	 */
+	public List<Comment> getCommentListSortByCreateDate()
+	{	
+		return this.commentRepository.findTop15OrderByCreateDateDesc();
+	}
 }
