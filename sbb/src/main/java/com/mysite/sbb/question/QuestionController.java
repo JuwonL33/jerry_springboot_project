@@ -1,7 +1,6 @@
 package com.mysite.sbb.question;
 
 import java.security.Principal;
-import java.util.Enumeration;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -31,7 +30,6 @@ import com.mysite.sbb.user.SiteUser;
 import com.mysite.sbb.user.UserService;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor
 @RequestMapping("/question")
