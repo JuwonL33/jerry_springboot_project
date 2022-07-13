@@ -27,6 +27,7 @@ dependencies {
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'		// Spring Security 와 관련된 Thymeleaf 라이브러리
 	implementation 'org.commonmark:commonmark:0.18.2'							// Markdown 라이브러리
 	runtimeOnly 'org.postgresql:postgresql'										// PostgreSQL 라이브러리
+	implementation 'org.springframework.boot:spring-boot-starter-mail'			// java SMTP
 }
 
 tasks.named('test') {

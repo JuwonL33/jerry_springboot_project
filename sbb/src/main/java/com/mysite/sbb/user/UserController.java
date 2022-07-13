@@ -8,6 +8,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -36,6 +37,7 @@ public class UserController {
     private final QuestionService questionService;
     private final AnswerService answerService;
     private final CommentService commentService;
+    private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/signup")
     public String signup(UserCreateForm userCreateForm) {
@@ -137,6 +139,49 @@ public class UserController {
 		model.addAttribute("siteUser", siteUser);
     	model.addAttribute("paging", paging);
     	return "/userInfo/user_info_comment";
+    }
+    
+    /* user info : setting */
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/myInfo/setting")
+    public String myInfoSetting(UserUpdateForm userUpdateForm) {
+    	return "/userInfo/user_info_setting";
+    }
+    
+    /* user info : setting */
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/myInfo/setting")
+    public String myInfoSetting(@Valid UserUpdateForm userUpdateForm, BindingResult bindingResult, Principal principal) {
+    	
+    	SiteUser user = this.userService.getUser(principal.getName());
+    	
+        if (bindingResult.hasErrors()) {
+            return "/userInfo/user_info_setting";
+        }
+        
+        // 기존 비밀번호가 맞는지 확인
+        if (!passwordEncoder.matches(userUpdateForm.getCurrentPassword(), user.getPassword())) {
+            bindingResult.rejectValue("currentPassword", "passwordInCorrect", "현재 비밀번호와 다릅니다.");
+            return "/userInfo/user_info_setting";
+        }
+
+
+        if (!userUpdateForm.getPassword1().equals(userUpdateForm.getPassword2())) {
+            bindingResult.rejectValue("password2", "passwordInCorrect", 
+                    "2개의 패스워드가 일치하지 않습니다.");
+            return "/userInfo/user_info_setting";
+        }
+        
+        try {
+        	this.userService.updatePassword(userUpdateForm.getPassword1(), user.getEmail());
+
+        } catch (Exception e) {
+        	e.printStackTrace();
+        	bindingResult.reject("change Password Failed", e.getMessage());
+        	return "/userInfo/user_info_setting";
+        }
+        
+        return "redirect:/";
     }
   
 }
