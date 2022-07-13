@@ -3,11 +3,13 @@ package com.mysite.sbb;
 import java.util.List;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -17,6 +19,7 @@ import com.mysite.sbb.comment.Comment;
 import com.mysite.sbb.comment.CommentService;
 import com.mysite.sbb.user.SiteUser;
 import com.mysite.sbb.user.UserService;
+import com.mysite.sbb.user.UserUpdateForm;
 
 import lombok.RequiredArgsConstructor;
 
@@ -51,7 +54,7 @@ public class CommonController {
 	 * GET : 비밀번호를 찾기 위한 메소드
 	 */
 	@RequestMapping("/forgot_password")
-	public String forgot_password(Model model) {
+	public String forgot_password(Model model, ForgotPasswordForm forgotPasswordForm) {
 		return "/common/forgot_password";
 	}
 	
@@ -60,14 +63,23 @@ public class CommonController {
 	 */
 	@Transactional
 	@PostMapping("/forgot_password")
-	public String forgot_password(String email, String username) {
-		SiteUser user = this.userService.findUserByEmail(email);
-		if (user.getUsername().equals(username)) {
-			Mail mail = this.userService.createMail(email);
+	public String forgot_password(@Valid ForgotPasswordForm forgotPasswordForm, BindingResult bindingResult) {	
+		if (bindingResult.hasErrors()) {
+            return "/common/forgot_password";
+        }
+		
+		try {
+			SiteUser user = this.userService.findUserByEmail(forgotPasswordForm.getEmail());
+			Mail mail = this.userService.createMail(forgotPasswordForm.getEmail());
 			this.userService.mailSend(mail);
-			return "login_form";
-		} else {
-			return "login_form";
-		}
+			return "/login_form";
+		} catch (DataNotFoundException e) {
+	        // 이메일에 해당하는 계정 존재여부 체크
+        	e.printStackTrace();
+            bindingResult.rejectValue("email", "emailInCorrect", "해당 이메일이 존재하지 않습니다.");
+            return "/common/forgot_password";
+        } 
+
+
 	}
 }
