@@ -17,6 +17,18 @@
 	</div>
 	<!-- 스크립트 -->
 	<script layout:fragment="script" type='text/javascript'>
-		var simplemde = new SimpleMDE({ element: document.getElementById("questionEditor") });
+		var simplemde = new SimpleMDE({ 
+			autofocus: true,
+			autosave: {
+				enabled: true,
+				uniqueId: "MyUniqueID",
+				delay: 1000,
+			},
+			blockStyles: {
+				bold: "__",
+				italic: "_"
+			},
+			element: document.getElementById("questionEditor")
+			});
 	</script>
 </html>
