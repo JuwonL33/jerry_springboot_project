@@ -79,4 +79,9 @@ public class CommonController {
 
 
 	}
+	
+	@RequestMapping("/privacy")
+	public String privacy() {
+		return "/common/privacy";
+	}
 }

@@ -21,10 +21,13 @@
         </div>
 	
 	<!-- 기본 템플릿 안에 삽입될 내용 Start -->
-		<div class="col-sm-12 col-md-9 col-lg-10 p-2" style="height: auto !important;">
-			<th:block layout:fragment="content"></th:block>
+		<div id="body-wrapper" class="col-sm-12 col-md-9 col-lg-10 p-2" style="min-height: 100%; position:relative;">
+			<th:block id="body-content" layout:fragment="content" style="margin-top: 100px; padding-bottom : 60px;"></th:block>
 		</div>
+	<!-- Footer -->
+	<footer th:replace="footer :: footer" class="footer"></footer>
 	</div>
+	
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script th:src="@{/bootstrap.min.js}"></script>
 <!-- simpleMDE  -->
