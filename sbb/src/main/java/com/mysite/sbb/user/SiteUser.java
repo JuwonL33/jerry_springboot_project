@@ -21,7 +21,7 @@ import lombok.Setter;
 @Setter
 @Entity
 public class SiteUser {			// 엔티티명을 User대신 SiteUser라고 지은 이유 : 스프링 시큐리티에 이미 User 클래스가 있기 때문이다.
-
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

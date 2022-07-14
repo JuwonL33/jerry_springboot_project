@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Service
 public class UserSecurityService implements UserDetailsService {
-
+	
 	private final UserRepository userRepository;
 	
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

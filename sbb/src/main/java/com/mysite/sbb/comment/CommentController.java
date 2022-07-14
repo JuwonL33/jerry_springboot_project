@@ -45,7 +45,7 @@ public class CommentController {
 		if (bindingResult.hasErrors()) {
             return "comment_form";
         }
-		
+
 		this.commentService.createQuestionComment(question, commentForm.getContent(), siteUser);
 		
 		return String.format("redirect:/question/detail/%s/%s", question.getCategory().getLabel(), question.getId());

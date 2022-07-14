@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Service
 public class CategoryService {
-
 	private final CategoryRepository categoryRepository;
 	
 	public Category getCategory(Integer id) {

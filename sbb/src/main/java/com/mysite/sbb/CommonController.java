@@ -6,7 +6,6 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,7 +18,6 @@ import com.mysite.sbb.comment.Comment;
 import com.mysite.sbb.comment.CommentService;
 import com.mysite.sbb.user.SiteUser;
 import com.mysite.sbb.user.UserService;
-import com.mysite.sbb.user.UserUpdateForm;
 
 import lombok.RequiredArgsConstructor;
 
@@ -27,7 +25,6 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/common")
 @RequiredArgsConstructor
 public class CommonController {
-
 	private final AnswerService answerService;
 	private final CommentService commentService;
     private final UserService userService;

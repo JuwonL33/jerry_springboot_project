@@ -21,7 +21,6 @@ import lombok.RequiredArgsConstructor;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-	
 	private final UserSecurityService userSecurityService;
 	
 	@Override

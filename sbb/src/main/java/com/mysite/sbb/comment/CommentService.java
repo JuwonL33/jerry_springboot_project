@@ -21,7 +21,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Service
 public class CommentService {
-
 	private final CommentRepository commentRepository;
 	
 	public Comment getComment(Integer id) {
