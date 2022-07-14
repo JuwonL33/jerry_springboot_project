@@ -17,4 +17,9 @@ public class MainController {
 	public String root() {
 		return "redirect:/question/list/qna";
 		}
+	
+	@RequestMapping("/testEditor")
+	public String testEditor() {
+		return "testEditor";
+		}
 }
