@@ -115,6 +115,12 @@ public class QuestionService {
 	public void vote(Question question, SiteUser siteUser) {
 		question.getVoter().add(siteUser);
 		this.questionRepository.save(question);
+		int id = question.getId();
+		int recommend = question.getVoter().size();
+		// this.questionRepository.updateRecommend(id, recommend);
+		/*
+		question.getVoter().add(siteUser);
+		this.questionRepository.save(question);*/
 	}
 	
 	public Page<Question> getListByUsername(int page, SiteUser siteUser)

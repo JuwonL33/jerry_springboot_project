@@ -5,10 +5,16 @@
 			<h5 class="border-bottom pb-2 mb-3" th:if="${cate.toString() == 'free'}">자유게시판</h5>
 			<!-- 검색 시작 -->
 			<div class="row my-3">
-				<!-- 글쓰기 버튼 -->
+				<!-- 정렬기능 -->
 				<div class="col-6">
-					<button class="btn btn-primary sort active" type="button" data-sort="latest">최신순</button>
-					<button class="btn btn-primary sort" type="button" data-sort="view">조회순</button>
+					<div class="btn-group" role="group" data-toggle="buttons">
+						<button class="btn btn-secondary sort active" type="button" data-original-title="최신순" data-sort="latest" title="최신순">
+							<i class="bi bi-bookshelf"></i>
+						</button>
+						<button class="btn btn-secondary sort" type="button" data-original-title="조회순" data-sort="view" title="조회순">
+							<i class="bi bi-emoji-smile"></i>
+						</button>
+			        </div>
 				</div>
 				<div class="col-6">
 					<div class="input-group">
@@ -89,6 +95,7 @@
 			</div>
 		</div>
 	</div>
+	<script th:src="@{/js/sortbar.js}"></script>
 	<script layout:fragment="script" type="text/javascript">
 	const page_elements = document.getElementsByClassName("page-link");
 	Array.from(page_elements).forEach(function(element){
@@ -121,7 +128,11 @@
 		document.getElementById('sort').value = this.dataset.sort;
 		document.getElementById('page').value = 0;
 		document.getElementById('searchForm').submit();
+		
+		$('.sort').not(this).removeClass('active');
+      	$(this).toggleClass('active');
 		});
 	});
+	
 	</script>	
 </html>
