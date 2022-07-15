@@ -63,7 +63,7 @@ public class CommonController {
 	 */
 	@Transactional
 	@PostMapping("/forgot_password")
-	public String forgot_password(@Valid ForgotPasswordForm forgotPasswordForm, BindingResult bindingResult) {	
+	public String forgot_password(Model model, @Valid ForgotPasswordForm forgotPasswordForm, BindingResult bindingResult) {	
 		if (bindingResult.hasErrors()) {
             return "/common/forgot_password";
         }
@@ -72,7 +72,8 @@ public class CommonController {
 			SiteUser user = this.userService.findUserByEmail(forgotPasswordForm.getEmail());
 			Mail mail = this.userService.createMail(forgotPasswordForm.getEmail());
 			this.userService.mailSend(mail);
-			return "/login_form";
+			model.addAttribute("message", "임시 비밀번호가 메일로 전송되었습니다.");
+			return "/common/forgot_password";
 		} catch (DataNotFoundException e) {
 	        // 이메일에 해당하는 계정 존재여부 체크
         	e.printStackTrace();

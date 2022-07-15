@@ -53,12 +53,21 @@ public class QuestionService {
 		};
 	}
 	
-	public Page<Question> getList(int page, String kw, Category category)
+	public Page<Question> getList(int page, String kw, Category category, String sort)
 	{
-		List<Sort.Order> sorts = new ArrayList<>();									// 생성일자 역순으로 정렬을 위해 sorts 객체 생성
-		sorts.add(Sort.Order.desc("createDate"));									// 생성일자 역순으로 정렬
+
+		Question question = new Question();
+		System.out.println(sort.trim() == "recommend");
+		List<Sort.Order> sorts = new ArrayList<>();										// 정렬을 위해 sorts 객체 생성
+		if (sort.equals("latest")) {
+			sorts.add(Sort.Order.desc("createDate"));									// 
+		} else if (sort.equals("view")) {
+			sorts.add(Sort.Order.desc("view"));											// 생성일자 역순으로 정렬
+			sorts.add(Sort.Order.desc("createDate"));	
+		}
+		
 		Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));				// page 번호를 param으로 받는다. Pageable 객체를 반환.
-		Specification<Question> spec = search(kw);
+		// Specification<Question> spec = search(kw);
 		return this.questionRepository.findAllByKeyword(kw, pageable, category);
 	}
 	

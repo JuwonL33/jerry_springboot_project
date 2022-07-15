@@ -45,13 +45,15 @@ public class QuestionController {
 	// http://localhost:8080/question/list?page=0 처럼 GET 방식으로 요청된 URL에서 page값을 가져오기 위해 @RequestParam 처리
 	public String list(Model model, @RequestParam(value="page", defaultValue="0") int page, 
 			@RequestParam(value="kw", defaultValue="") String kw,
+			@RequestParam(value="sort", defaultValue="latest") String sort,
 			@PathVariable("cate") String cate) {
 		// log.info("page:{}, kw:{}", page, kw);
 		Category category = this.categoryService.findCategoryByLabel(cate);
-		Page<Question> paging = this.questionService.getList(page, kw, category);
+		Page<Question> paging = this.questionService.getList(page, kw, category, sort);
 		model.addAttribute("paging", paging);			// 이전에 가지고 있었던 paging 값을 기억해뒀다가 다시 돌려줌
 		model.addAttribute("kw", kw);					// 이전에 가지고 있었던 kw 값을 기억해뒀다가 다시 돌려줌
 		model.addAttribute("cate", category.getLabel());
+		model.addAttribute("sort", sort);
 		return "/question/question_list";
 	}
 	
