@@ -16,6 +16,8 @@ import com.mysite.sbb.answer.Answer;
 import com.mysite.sbb.answer.AnswerService;
 import com.mysite.sbb.comment.Comment;
 import com.mysite.sbb.comment.CommentService;
+import com.mysite.sbb.question.Question;
+import com.mysite.sbb.question.QuestionService;
 import com.mysite.sbb.user.SiteUser;
 import com.mysite.sbb.user.UserService;
 
@@ -25,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/common")
 @RequiredArgsConstructor
 public class CommonController {
+	private final QuestionService questionService;
 	private final AnswerService answerService;
 	private final CommentService commentService;
     private final UserService userService;
@@ -81,7 +84,9 @@ public class CommonController {
 	}
 	
 	@RequestMapping("/privacy")
-	public String privacy() {
+	public String privacy(Model model) {
+		Question privacy = this.questionService.getQuestion(616);
+		model.addAttribute("privacy", privacy);
 		return "/common/privacy";
 	}
 }
