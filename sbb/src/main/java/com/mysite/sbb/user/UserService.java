@@ -25,7 +25,7 @@ public class UserService {
 	private String from;
 	
 	public SiteUser create(String username, String email, String password) {
-		SiteUser user = new SiteUser();
+		SiteUser user = new SiteUser(username, email, null);
 		user.setUsername(username);
 		user.setEmail(email);
 		user.setPassword(passwordEncoder.encode(password)); 					// 입력받은 비밀번호를 암호화하여 set.

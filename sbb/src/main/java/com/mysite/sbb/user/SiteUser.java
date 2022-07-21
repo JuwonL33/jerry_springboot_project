@@ -14,9 +14,12 @@ import com.mysite.sbb.answer.Answer;
 import com.mysite.sbb.comment.Comment;
 import com.mysite.sbb.question.Question;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@NoArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -34,6 +37,8 @@ public class SiteUser {			// 엔티티명을 User대신 SiteUser라고 지은 �
 	@Column(unique = true)
 	private String email;
 	
+	private UserRole role;
+	
 	@OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE)		// 한 회원이 여러개의 질문을 쓸 수 있음
 	List<Question> userQuestionList;		
 	
@@ -44,4 +49,21 @@ public class SiteUser {			// 엔티티명을 User대신 SiteUser라고 지은 �
 	
 	@OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE)		// 한 회원이 여러개의 댓글을 쓸 수 있음
 	List<Comment> userCommentList;	
+	
+	
+	@Builder
+	public SiteUser(String username, String email, UserRole role) {
+		this.username = username;
+		this.email = email;
+		this.role = role;
+	}
+	
+	public SiteUser update(String username) {
+		this.username = username;
+		return this;
+	}
+	
+	public String getRoleKey() {
+		return this.role.getValue();
+	}
 }

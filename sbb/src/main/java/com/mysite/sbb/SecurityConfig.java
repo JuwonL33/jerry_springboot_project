@@ -1,7 +1,10 @@
 package com.mysite.sbb;
 
+
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import com.mysite.sbb.auth.CustomOAuth2UserService;
 import com.mysite.sbb.user.UserSecurityService;
 
 import lombok.RequiredArgsConstructor;
@@ -22,12 +26,20 @@ import lombok.RequiredArgsConstructor;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private final UserSecurityService userSecurityService;
+	private final CustomOAuth2UserService customOAuth2UserService;
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	@Bean
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
+	}
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests().antMatchers("/**").permitAll()
 		.and()
-			.csrf().ignoringAntMatchers("/h2-console/**")					// h2-console 접속시 403 Forbidden이 뜨는 것을 방지
+			.csrf().ignoringAntMatchers("/h2-console/**")						// h2-console 접속시 403 Forbidden이 뜨는 것을 방지
 		.and()
 			.headers()
 			.addHeaderWriter(new XFrameOptionsHeaderWriter(
@@ -41,7 +53,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))	// 로그아웃 URL 설정
 			.logoutSuccessUrl("/")												// 로그아웃 성공 시 루트로 이동
 			.invalidateHttpSession(true)										// 로그아웃시 생성된 사용자 세션도 삭제하도록 처리
-			;
+		.and()
+			.oauth2Login().userInfoEndpoint().userService(customOAuth2UserService);
 	}
 	
 	@Bean

@@ -14,6 +14,8 @@ public interface UserRepository extends JpaRepository<SiteUser, Long> {
 	
 	Optional<SiteUser> findUserByEmail(String email);
 	
+	SiteUser findByEmail(String email);
+	
 	/*
 	 * ​UPDATE, DELETE 경우 @Transactional 이 어노테이션을 추가해주지 않으면 문제가 발생하기 때문에 아래와 같이 추가해주어야 한다.
 	 */

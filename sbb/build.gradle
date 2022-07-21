@@ -28,6 +28,9 @@ dependencies {
 	implementation 'org.commonmark:commonmark:0.18.2'							// Markdown 라이브러리
 	runtimeOnly 'org.postgresql:postgresql'										// PostgreSQL 라이브러리
 	implementation 'org.springframework.boot:spring-boot-starter-mail'			// java SMTP
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	testImplementation 'org.springframework.security:spring-security-test'
+
 }
 
 tasks.named('test') {
