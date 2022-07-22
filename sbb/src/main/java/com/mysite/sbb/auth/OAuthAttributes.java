@@ -24,18 +24,19 @@ public class OAuthAttributes {
 		this.nameAttributeKey = nameAttributeKey;
 		this.username = username;
 		this.email = email;
+		
 	}
 	
 	public static OAuthAttributes of(String registrationId,
 									 String userNameAttributeName,
 									 Map<String, Object> attributes) {
-		return ofGoogle(userNameAttributeName, attributes);
+		return ofGoogle(registrationId, userNameAttributeName, attributes);
 	}
 	
-	public static OAuthAttributes ofGoogle(String userNameAttributeName,
+	public static OAuthAttributes ofGoogle(String registrationId, String userNameAttributeName,
 			 							   Map<String, Object> attributes) {
 		return OAuthAttributes.builder()
-				.username((String) attributes.get("username"))
+				.username((String) attributes.get("email"))
 				.email((String) attributes.get("email"))
 				.attributes(attributes)
 				.nameAttributeKey(userNameAttributeName)
@@ -44,7 +45,7 @@ public class OAuthAttributes {
 	
 	public SiteUser toEntity() {
 		return SiteUser.builder()
-				.username(username)
+				.username(email)
 				.email(email)
 				.role(UserRole.SOCIAL)
 				.build();

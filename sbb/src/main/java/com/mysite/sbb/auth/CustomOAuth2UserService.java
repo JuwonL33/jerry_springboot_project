@@ -28,7 +28,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 	public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 		OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
 		OAuth2User oAuth2User = delegate.loadUser(userRequest);
-		// 현재 로그인 진행 중인 서비스를 구분하는 코드
+		// 현재 로그인 진행 중인 서비스를 구분하는 코드 Google, Naver 등등
 		String registrationId = userRequest
 				.getClientRegistration()
 				.getRegistrationId();
@@ -43,6 +43,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 		SiteUser user = saveOrUpdate(attributes);
 		// SessioUser: 세션에 사용자 정보를 저장하기 위한 DTO 클래스 (개발자가 생성)
 		httpSession.setAttribute("user", new SessionUser(user));
+		System.out.println("heepSession : " + httpSession.getAttribute("email"));
+		
 		return new DefaultOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority(user.getRoleKey())),
                 attributes.getAttributes(),
