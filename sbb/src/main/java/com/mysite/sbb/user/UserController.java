@@ -8,7 +8,10 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -76,6 +79,15 @@ public class UserController {
     
     @GetMapping("/login")
     public String login() {
+    	return "login_form";
+    }
+    
+    @GetMapping("/login/test")
+    public String loginTest(Authentication authentication, 
+            @AuthenticationPrincipal SiteUser user) {
+    	OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+          // System.out.println("authentication: " + userDetails.getUsername());
+          System.out.println("Attributes: " + oAuth2User.getAttributes());
     	return "login_form";
     }
     
