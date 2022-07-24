@@ -1722,3 +1722,14 @@ org.springframework.expression.spel.SpelEvaluationException: EL1004E: Method cal
 2022-07=24 15:45:42.534  INFO 3797 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
 2022-07=24 15:45:42.534  INFO 3797 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
 2022-07=24 15:45:42.535  INFO 3797 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2022-07=24 15:50:33.285  INFO 3797 --- [http-nio-8080-exec-9] c.m.sbb.auth.CustomOAuth2UserService     : CustomOAuth2UserService
+2022-07=24 15:50:33.435  INFO 3797 --- [http-nio-8080-exec-9] com.mysite.sbb.auth.OAuthAttributes      : userNameAttributeName = "response"
+2022-07=24 15:50:33.436  INFO 3797 --- [http-nio-8080-exec-9] com.mysite.sbb.auth.OAuthAttributes      : attributes = {
+  "resultcode" : "00",
+  "message" : "success",
+  "response" : {
+    "id" : "hhNqr6ALZ80nirgTnUpa8P4SUQzS94UkO8re3_XIja4",
+    "nickname" : "Ashley",
+    "email" : "leejw2013@naver.com"
+  }
+}
