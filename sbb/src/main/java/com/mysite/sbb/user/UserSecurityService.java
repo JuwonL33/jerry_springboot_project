@@ -27,18 +27,33 @@ public class UserSecurityService implements UserDetailsService {
 	
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Optional<SiteUser> _siteUser = this.userRepository.findByusername(username);
+
 		if (_siteUser.isEmpty()) {														// 존재하지 않는 사용자 입력시 리턴할 에러
 			throw new UsernameNotFoundException("사용자를 찾을 수 없습니다.");
 		}
 		
 		SiteUser siteUser = _siteUser.get();
+		System.out.println("_siteUser : " + siteUser.getUsername());
 		List<GrantedAuthority> authorities = new ArrayList<>();
+		/*
 		if ("admin".equals(username)) {													// ID가 admin 이면
 			authorities.add(new SimpleGrantedAuthority(UserRole.ADMIN.getValue()));		// UserRole의 ADMIN의 value를 부여
 		} else {
 			authorities.add(new SimpleGrantedAuthority(UserRole.USER.getValue()));		// 일반사용자면 USER의 value를 부여
 		}
+		*/
 		
+		System.out.println("권한 : " + authorities);
+		System.out.println("롤 : " + siteUser.getRole());
+		
+		
+		if (siteUser.getRole().equals("ADMIN")) {
+			authorities.add(new SimpleGrantedAuthority(UserRole.ADMIN.getValue()));
+		} else if (siteUser.getRole().equals("SOCIAL")) {
+			authorities.add(new SimpleGrantedAuthority(UserRole.SOCIAL.getValue()));
+		} else {
+			authorities.add(new SimpleGrantedAuthority(UserRole.USER.getValue()));		// 일반사용자면 USER의 value를 부여
+		}
 		return new User(siteUser.getUsername(), siteUser.getPassword(), authorities);
 	}
 	

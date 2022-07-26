@@ -20,8 +20,14 @@
 				<div class="my-3">
 					<a href="javascript:void(0);" class="recommend btn btn-sm btn-outline-secondary" th:data-uri="@{|/question/vote/${question.category.label}/${question.id}|}">추천<span class="badge rounded-pill bg-success" th:text="${#lists.size(question.voter)}"></span></a>
 					<a th:href="|javascript:question_comment('${question.id}')|" class="comment btn btn-sm btn-outline-secondary">댓글<span class="badge rounded-pill bg-primary" th:text="${#lists.size(question.commentList)}"></span></a>
-					<a th:href="@{|/question/modify/${question.category.label}/${question.id}|}" class="btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()" th:if="${question.author != null and #authentication.getPrincipal().getUsername() == question.author.username}" th:text="수정"></a>
-					<a href="javascript:void(0)" th:data-uri="@{|/question/delete/${question.category.label}/${question.id}|}" class="delete btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()" th:if="${question.author != null and #authentication.getPrincipal().getUsername() == question.author.username}" th:text="삭제"></a>
+					<!-- 소셜 회원 수정 -->
+					<a th:href="@{|/question/modify/${question.category.label}/${question.id}|}" class="btn btn-sm btn-outline-secondary" sec:authorize="hasRole('ROLE_SOCIAL')" th:if="${question.author != null and #authentication.getPrincipal().getName() == question.author.username}" th:text="수정"></a>
+					<!-- 일반 회원 수정 -->
+					<a th:href="@{|/question/modify/${question.category.label}/${question.id}|}" class="btn btn-sm btn-outline-secondary" sec:authorize="hasRole('ROLE_USER')" th:if="${question.author != null and #authentication.getPrincipal().getUsername() == question.author.username}" th:text="수정"></a>
+					<!-- 소셜 회원 삭제 -->
+					<a href="javascript:void(0)" th:data-uri="@{|/question/delete/${question.category.label}/${question.id}|}" class="delete btn btn-sm btn-outline-secondary" sec:authorize="hasRole('ROLE_SOCIAL')" th:if="${question.author != null and #authentication.getPrincipal().getName() == question.author.username}" th:text="삭제"></a>
+					<!-- 일반 회원 삭제 -->
+					<a href="javascript:void(0)" th:data-uri="@{|/question/delete/${question.category.label}/${question.id}|}" class="delete btn btn-sm btn-outline-secondary" sec:authorize="hasRole('ROLE_USER')" th:if="${question.author != null and #authentication.getPrincipal().getUsername() == question.author.username}" th:text="삭제"></a>
 				</div>
 				<!-- 댓글 반복 시작 -->
 				<div class="comment py-2 text-muted" th:each="comment : ${question.commentList}">
@@ -31,8 +37,15 @@
 				            <span th:if="${comment.author != null}" th:text="${comment.author.username}"></span>
 			                &nbsp;|&nbsp; <span th:text="${#temporals.format(comment.createDate, 'yyyy-MM-dd HH:mm')}"></span>
 			            </div>
-    					<a th:href="@{|/comment/modify/${comment.id}|}" class="btn btn-sm btn-outline-secondary py-0" sec:authorize="isAuthenticated()" th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}" th:text="수정"></a>
-						<a href="javascript:void(0)" th:data-uri="@{|/comment/delete/${comment.id}|}" class="delete btn btn-sm btn-outline-secondary py-0" sec:authorize="isAuthenticated()" th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}" th:text="삭제"></a>
+						<!-- 소셜 회원 수정 -->
+    					<a th:href="@{|/comment/modify/${comment.id}|}" class="btn btn-sm btn-outline-secondary py-0" sec:authorize="hasRole('ROLE_SOCIAL')" th:if="${comment.author != null and #authentication.getPrincipal().getName() == comment.author.username}" th:text="수정"></a>
+						<!-- 일반 회원 수정 -->
+    					<a th:href="@{|/comment/modify/${comment.id}|}" class="btn btn-sm btn-outline-secondary py-0" sec:authorize="hasRole('ROLE_USER')" th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}" th:text="수정"></a>
+						<!-- 소셜 회원 삭제 -->
+						<a href="javascript:void(0)" th:data-uri="@{|/comment/delete/${comment.id}|}" class="delete btn btn-sm btn-outline-secondary py-0" sec:authorize="hasRole('ROLE_SOCIAL')" th:if="${comment.author != null and #authentication.getPrincipal().getName() == comment.author.username}" th:text="삭제"></a>
+						<!-- 일반 회원 삭제 -->
+						<a href="javascript:void(0)" th:data-uri="@{|/comment/delete/${comment.id}|}" class="delete btn btn-sm btn-outline-secondary py-0" sec:authorize="hasRole('ROLE_USER')" th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}" th:text="삭제"></a>
+			        
 			        </span>
 			    </div>
 				<!-- 댓글작성 폼 시작-->
@@ -69,8 +82,14 @@
 				<div class="my-3">
 					<a href="javascript:void(0);" class="recommend btn btn-sm btn-outline-secondary" th:data-uri="@{|/answer/vote/${answer.id}|}">추천<span class="badge rounded-pill bg-success" th:text="${#lists.size(answer.voter)}"></span></a>
 					<a th:href="|javascript:answer_comment('${answer.id}')|" class="comment btn btn-sm btn-outline-secondary">댓글<span class="badge rounded-pill bg-primary" th:text="${#lists.size(answer.commentList)}"></span></a>
-					<a th:href="@{|/answer/modify/${answer.id}|}" class="btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()" th:if="${answer.author != null and #authentication.getPrincipal().getUsername() == answer.author.username}" th:text="수정"></a>
-					<a href="javascript:void(0)" th:data-uri="@{|/answer/delete/${answer.id}|}" class="delete btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()" th:if="${answer.author != null and #authentication.getPrincipal().getUsername() == answer.author.username}" th:text="삭제"></a>
+					<!-- 소셜 회원 수정 -->
+					<a th:href="@{|/answer/modify/${answer.id}|}" class="btn btn-sm btn-outline-secondary" sec:authorize="hasRole('ROLE_SOCIAL')" th:if="${answer.author != null and #authentication.getPrincipal().getName() == answer.author.username}" th:text="수정"></a>
+					<!-- 일반 회원 수정 -->
+					<a th:href="@{|/answer/modify/${answer.id}|}" class="btn btn-sm btn-outline-secondary" sec:authorize="hasRole('ROLE_USER')" th:if="${answer.author != null and #authentication.getPrincipal().getUsername() == answer.author.username}" th:text="수정"></a>
+					<!-- 소셜 회원 삭제 -->
+					<a href="javascript:void(0)" th:data-uri="@{|/answer/delete/${answer.id}|}" class="delete btn btn-sm btn-outline-secondary" sec:authorize="hasRole('ROLE_SOCIAL')" th:if="${answer.author != null and #authentication.getPrincipal().getName() == answer.author.username}" th:text="삭제"></a>
+					<!-- 일반 회원 삭제 -->
+					<a href="javascript:void(0)" th:data-uri="@{|/answer/delete/${answer.id}|}" class="delete btn btn-sm btn-outline-secondary" sec:authorize="hasRole('ROLE_USER')" th:if="${answer.author != null and #authentication.getPrincipal().getUsername() == answer.author.username}" th:text="삭제"></a>
 				</div>
 				<!-- 답변의 댓글 반복 시작 -->
 				<div class="comment py-2 text-muted" th:each="comment : ${answer.commentList}">
@@ -81,8 +100,14 @@
 			                &nbsp;|&nbsp; <span th:text="${#temporals.format(comment.createDate, 'yyyy-MM-dd HH:mm')}"></span>
 			                    
 			            </div>
-    					<a th:href="@{|/comment/modify/${comment.id}|}" class="btn btn-sm btn-outline-secondary py-0" sec:authorize="isAuthenticated()" th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}" th:text="수정"></a>
-						<a href="javascript:void(0)" th:data-uri="@{|/comment/delete/${comment.id}|}" class="delete btn btn-sm btn-outline-secondary py-0" sec:authorize="isAuthenticated()" th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}" th:text="삭제"></a>
+						<!-- 소셜 회원 수정 -->
+    					<a th:href="@{|/comment/modify/${comment.id}|}" class="btn btn-sm btn-outline-secondary py-0" sec:authorize="hasRole('ROLE_SOCIAL')" th:if="${comment.author != null and #authentication.getPrincipal().getName() == comment.author.username}" th:text="수정"></a>
+						<!-- 일반 회원 수정 -->
+    					<a th:href="@{|/comment/modify/${comment.id}|}" class="btn btn-sm btn-outline-secondary py-0" sec:authorize="hasRole('ROLE_USER')" th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}" th:text="수정"></a>
+						<!-- 소셜 회원 삭제 -->
+						<a href="javascript:void(0)" th:data-uri="@{|/comment/delete/${comment.id}|}" class="delete btn btn-sm btn-outline-secondary py-0" sec:authorize="hasRole('ROLE_SOCIAL')" th:if="${comment.author != null and #authentication.getPrincipal().getName() == comment.author.username}" th:text="삭제"></a>
+						<!-- 일반 회원 삭제 -->
+						<a href="javascript:void(0)" th:data-uri="@{|/comment/delete/${comment.id}|}" class="delete btn btn-sm btn-outline-secondary py-0" sec:authorize="hasRole('ROLE_USER')" th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}" th:text="삭제"></a>
 			        </span>
 			    </div>
 				<!-- 답변의 댓글작성 폼 시작-->

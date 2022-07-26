@@ -123,6 +123,7 @@ public class QuestionController {
 	@GetMapping("/modify/{cate}/{id}")
 	public String questionModify(QuestionForm questionForm, @PathVariable("cate") String cate, @PathVariable("id") Integer id, Principal principal) {
 		Question question = this.questionService.getQuestion(id);
+		// System.out.println("role : " + question.getAuthor().getRole());
 		if(!question.getAuthor().getUsername().equals(principal.getName())){				// 세션에 있는 사용자와 다른 사용자가 수정 요청했을 때
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
 		}

@@ -1,21 +1,35 @@
 <html layout:decorate="~{layout}">
 	<div layout:fragment="content" class="container my-3">
 		<h5 class="border-bottom pb-2 mb-3" th:text=${siteUser.username}></h5>
-		<!-- userInfo 네비게이션 바 		<nav th:replace="/userInfo/user_info_navbar :: navbarUserInfo"></nav> -->
-		<ul class="nav nav-tabs">
-		    <li class="nav-item">
-		        <a class="nav-link" th:href="@{|/user/myInfo/base/${#authentication.getPrincipal().getUsername()}|}">내 정보</a>
-		    </li>
-		    <li class="nav-item">
-		        <a class="nav-link active" th:href="@{|/user/myInfo/question/${#authentication.getPrincipal().getUsername()}|}">게시</a>
-		    </li>
-		    <li class="nav-item">
-		        <a class="nav-link" th:href="@{|/user/myInfo/answer/${#authentication.getPrincipal().getUsername()}|}">답변</a>
-		    </li>
-		    <li class="nav-item">
-		        <a class="nav-link " th:href="@{|/user/myInfo/comment/${#authentication.getPrincipal().getUsername()}|}">댓글</a>
-		    </li>
-		</ul>
+			<!-- userInfo 네비게이션 바 -->
+				<ul class="nav nav-tabs" sec:authorize="hasRole('ROLE_USER')" >
+				    <li class="nav-item">
+				        <a class="nav-link" th:href="@{|/user/myInfo/base/${#authentication.getPrincipal().getUsername()}|}">내 정보</a>
+				    </li>
+				    <li class="nav-item">
+				        <a class="nav-link active" th:href="@{|/user/myInfo/question/${#authentication.getPrincipal().getUsername()}|}">게시</a>
+				    </li>
+				    <li class="nav-item">
+				        <a class="nav-link" th:href="@{|/user/myInfo/answer/${#authentication.getPrincipal().getUsername()}|}">답변</a>
+				    </li>
+				    <li class="nav-item">
+				        <a class="nav-link " th:href="@{|/user/myInfo/comment/${#authentication.getPrincipal().getUsername()}|}">댓글</a>
+				    </li>
+				</ul>
+				<ul class="nav nav-tabs" sec:authorize="hasRole('ROLE_SOCIAL')" >
+				    <li class="nav-item">
+				        <a class="nav-link" th:href="@{|/user/myInfo/base/${#authentication.getPrincipal().getName()}|}">내 정보</a>
+				    </li>
+				    <li class="nav-item">
+				        <a class="nav-link active" th:href="@{|/user/myInfo/question/${#authentication.getPrincipal().getName()}|}">게시</a>
+				    </li>
+				    <li class="nav-item">
+				        <a class="nav-link" th:href="@{|/user/myInfo/answer/${#authentication.getPrincipal().getName()}|}">답변</a>
+				    </li>
+				    <li class="nav-item">
+				        <a class="nav-link " th:href="@{|/user/myInfo/comment/${#authentication.getPrincipal().getName()}|}">댓글</a>
+				    </li>
+				</ul>
 		<!-- 작성한 게시물 목록 시작 --> 
 		<div id="profile_base">
 			<table class="table table-sm">

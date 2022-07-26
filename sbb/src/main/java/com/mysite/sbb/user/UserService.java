@@ -29,6 +29,7 @@ public class UserService {
 		user.setUsername(username);
 		user.setEmail(email);
 		user.setPassword(passwordEncoder.encode(password)); 					// 입력받은 비밀번호를 암호화하여 set.
+		user.setRole(UserRole.USER);
 		this.userRepository.save(user);
 		return user; 
 	}
