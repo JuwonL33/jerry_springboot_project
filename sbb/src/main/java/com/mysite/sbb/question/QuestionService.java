@@ -60,9 +60,12 @@ public class QuestionService {
 		System.out.println(sort.trim() == "recommend");
 		List<Sort.Order> sorts = new ArrayList<>();										// 정렬을 위해 sorts 객체 생성
 		if (sort.equals("latest")) {
-			sorts.add(Sort.Order.desc("createDate"));									// 
-		} else if (sort.equals("view")) {
-			sorts.add(Sort.Order.desc("view"));											// 생성일자 역순으로 정렬
+			sorts.add(Sort.Order.desc("createDate"));									// 최신순으로 정렬
+		} else if (sort.equals("view")) {												// 조회수가 높은 순으로 정렬
+			sorts.add(Sort.Order.desc("view"));											// 최신순으로 정렬
+			sorts.add(Sort.Order.desc("createDate"));	
+		} else {																		// 추천이 많은순으로 정렬
+			sorts.add(Sort.Order.desc("recommended"));		
 			sorts.add(Sort.Order.desc("createDate"));	
 		}
 		
@@ -112,15 +115,12 @@ public class QuestionService {
 		this.questionRepository.delete(question);
 	}
 	
+	@Transactional
 	public void vote(Question question, SiteUser siteUser) {
 		question.getVoter().add(siteUser);
 		this.questionRepository.save(question);
 		int id = question.getId();
-		int recommend = question.getVoter().size();
-		// this.questionRepository.updateRecommend(id, recommend);
-		/*
-		question.getVoter().add(siteUser);
-		this.questionRepository.save(question);*/
+		this.questionRepository.updateRecommend(id);
 	}
 	
 	public Page<Question> getListByUsername(int page, SiteUser siteUser)

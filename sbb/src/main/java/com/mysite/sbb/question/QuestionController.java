@@ -23,6 +23,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.mysite.sbb.answer.Answer;
 import com.mysite.sbb.answer.AnswerForm;
 import com.mysite.sbb.answer.AnswerService;
+import com.mysite.sbb.auth.CustomOAuth2UserService;
 import com.mysite.sbb.category.Category;
 import com.mysite.sbb.category.CategoryService;
 import com.mysite.sbb.comment.CommentForm;
@@ -30,7 +31,9 @@ import com.mysite.sbb.user.SiteUser;
 import com.mysite.sbb.user.UserService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/question")
 @Controller
@@ -47,7 +50,7 @@ public class QuestionController {
 			@RequestParam(value="kw", defaultValue="") String kw,
 			@RequestParam(value="sort", defaultValue="latest") String sort,
 			@PathVariable("cate") String cate) {
-		// log.info("page:{}, kw:{}", page, kw);
+		log.info("page:{}, kw:{}, sort:{}", page, kw, sort);
 		Category category = this.categoryService.findCategoryByLabel(cate);
 		Page<Question> paging = this.questionService.getList(page, kw, category, sort);
 		model.addAttribute("paging", paging);			// 이전에 가지고 있었던 paging 값을 기억해뒀다가 다시 돌려줌
@@ -162,6 +165,7 @@ public class QuestionController {
 	public String questionVote(Principal principal, @PathVariable("cate") String cate, @PathVariable("id") Integer id) {
 		Question question = this.questionService.getQuestion(id);
 		SiteUser siteUser = this.userService.getUser(principal.getName());
+
 		this.questionService.vote(question, siteUser);
 		return String.format("redirect:/question/detail/%s/%s", cate, id);
 	}

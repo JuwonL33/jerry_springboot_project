@@ -43,9 +43,6 @@ public class UserSecurityService implements UserDetailsService {
 		}
 		*/
 		
-		System.out.println("권한 : " + authorities);
-		System.out.println("롤 : " + siteUser.getRole());
-		
 		
 		if (siteUser.getRole().equals("ADMIN")) {
 			authorities.add(new SimpleGrantedAuthority(UserRole.ADMIN.getValue()));

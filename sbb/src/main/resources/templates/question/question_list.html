@@ -8,11 +8,14 @@
 				<!-- 정렬기능 -->
 				<div class="col-6">
 					<div class="btn-group" role="group" data-toggle="buttons">
-						<button class="btn btn-secondary sort active" type="button" data-original-title="최신순" data-sort="latest" title="최신순">
+						<button class="btn btn-secondary sort active" id="latest" type="button" data-original-title="최신순" data-sort="latest" title="최신순">
 							<i class="bi bi-bookshelf"></i>
 						</button>
-						<button class="btn btn-secondary sort" type="button" data-original-title="조회순" data-sort="view" title="조회순">
+						<button class="btn btn-secondary sort" id="view" type="button" data-original-title="조회순" data-sort="view" title="조회순">
 							<i class="bi bi-emoji-smile"></i>
+						</button>
+						<button class="btn btn-secondary sort" id="recommended" type="button" data-original-title="추천순" data-sort="recommended" title="추천순">
+							<i class="bi bi-hand-thumbs-up"></i>
 						</button>
 			        </div>
 				</div>
@@ -129,5 +132,22 @@
 		document.getElementById('searchForm').submit();
 		});
 	});
+	
+	sortbarActiveChange()
+	
+	function sortbarActiveChange(){
+		let pageUrl = new URL(window.location.href);
+		let param = pageUrl.searchParams
+		if (param.get('sort') == 'recommended') {
+			$(".sort").removeClass("active");
+			$("#recommended").addClass("active");
+		} else if (param.get('sort') == 'view') {
+			$(".sort").removeClass("active");
+			$("#view").addClass("active");
+		} else {
+			$(".sort").removeClass("active");
+			$("#latest").addClass("active");
+		}
+	}
 	</script>	
 </html>

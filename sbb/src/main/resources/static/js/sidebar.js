@@ -3,7 +3,6 @@ $(document).ready(function(){
 });
 
 function sidebarActiveChange(){
-	console.log("들어오니?")
 	let pageUrl = window.location.href;
 	if (pageUrl.indexOf('qna') > -1) {
 

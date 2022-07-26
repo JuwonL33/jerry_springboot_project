@@ -59,4 +59,7 @@ public class Question {
 	
 	@Column(columnDefinition = "integer default 0", nullable = false)	// 조회수
 	private int view;
+	
+	@Column(columnDefinition = "integer default 0", nullable = false)	// 조회수
+	private int recommended;
 }

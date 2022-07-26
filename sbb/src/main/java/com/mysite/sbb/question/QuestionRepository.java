@@ -48,4 +48,8 @@ public interface QuestionRepository extends JpaRepository<Question, Integer> {
 	@Modifying
 	@Query("update Question q set q.view = q.view + 1 where q.id = :id")
 	int updateView(@Param("id") Integer id);
+	
+	@Modifying
+	@Query("update Question q set q.recommended = q.recommended + 1 where q.id = :id")
+	int updateRecommend(@Param("id") Integer id);
 }
